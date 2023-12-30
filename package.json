@@ -1,0 +1,50 @@
+{
+  "name": "reports-telegram-boot",
+  "version": "0.0.1",
+  "description": " A simple telegram bot to colect some data",
+  "main": "src/index.ts",
+  "scripts": {
+    "start": "ts-node src/index.ts",
+    "dev": "nodemon src/index.ts",
+    "build": "tsc",
+    "lint": "eslint --fix src test",
+    "test": "jest",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [],
+  "author": "CJ R. <cj@null.computer> (https://w3cj.now.sh)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/w3cj/express-api-starter.git"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "cron": "^3.1.6",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "mongoose": "^8.0.3",
+    "morgan": "^1.10.0",
+    "node-telegram-bot-api": "^0.64.0"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/jest": "^29.5.10",
+    "@types/morgan": "^1.9.9",
+    "@types/node": "^20.10.0",
+    "@types/node-telegram-bot-api": "^0.64.1",
+    "@types/supertest": "^2.0.16",
+    "@typescript-eslint/eslint-plugin": "^6.13.1",
+    "@typescript-eslint/parser": "^6.13.1",
+    "eslint": "^8.54.0",
+    "eslint-config-airbnb-typescript": "^17.1.0",
+    "eslint-import-resolver-typescript": "^3.6.1",
+    "eslint-plugin-import": "^2.29.0",
+    "jest": "^29.7.0",
+    "nodemon": "^3.0.1",
+    "ts-jest": "^29.1.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.3.2"
+  }
+}
