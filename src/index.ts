@@ -4,7 +4,7 @@ const cron = require('cron');
 
 const User = require('./models');
 
-const findUser = async (username: string) => User.findOne({ username });
+const findUser = async (tgUserId: number) => User.findOne({ tgUserId });
 
 require('dotenv').config();
 
@@ -31,13 +31,13 @@ const STATES = {
 // Handle the /start command to capture user chatId and username
 bot.onText(/\/start/, async (msg) => {
   const chatId = msg.chat.id;
-  const username = msg.from.username;
+  const userId = msg.from.id;
   const firstName = msg.from.first_name;
   const lastName = msg.from.last_name;
 
-  const user = await findUser(username);
+  const user = await findUser(userId);
 
-  console.log('conversation start, user is', user);
+  console.log('conversation start, user is', msg);
 
   // if user is presend reset chat id and state
   if (user) {
@@ -49,7 +49,7 @@ bot.onText(/\/start/, async (msg) => {
       firstName,
       lastName,
       chatId,
-      username,
+      tgUserId: userId,
       state: STATES.IDLE,
     });
 
@@ -70,14 +70,14 @@ Ori poți trimite raportul în orice moment folosind comanda /raport`,
 bot.on('message', async (msg) => {
   const chatId = msg.chat.id;
   const messageText = msg.text;
-  const username = msg.from.username;
+  const userId = msg.from.id;
 
   if (messageText === '/start') return;
 
   // Find or create user in the database
-  let user = await findUser(username);
+  let user = await findUser(userId);
   if (!user) {
-    console.log(`username ${username} was not found in db`);
+    console.log(`user id ${userId} was not found in db`);
     bot.sendMessage(
       chatId,
       'ups :( avem probleme ⚠️ se pare că Sergiu a șters profilul tău din baza de date. Trebuie să stergi chatul și să incepi din nou folosind butonul "Start"',
@@ -87,7 +87,7 @@ bot.on('message', async (msg) => {
 
   console.log({
     messageText,
-    username,
+    userId,
     state: user.state,
   });
 
@@ -200,11 +200,11 @@ bot.on('message', async (msg) => {
 
 bot.onText(/\/raport/, async (msg) => {
   const chatId = msg.chat.id;
-  const username = msg.from.username;
-  let user = await findUser(username);
+  const tgUserId = msg.from.id;
+  let user = await findUser(tgUserId);
 
   if (!user) {
-    console.log(`username ${username} was not found in db`);
+    console.log(`username ${tgUserId} was not found in db`);
     bot.sendMessage(
       chatId,
       'ups :( avem probleme ⚠️ se pare că Sergiu a șters profilul tău din baza de date. Trebuie să stergi chatul și să incepi din nou folosind butonul "Start"',

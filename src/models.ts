@@ -20,7 +20,7 @@ mongoose
 
 const userSchema = new mongoose.Schema({
   chatId: { type: Number, required: true },
-  username: { type: String, required: true },
+  tgUserId: { type: Number, required: true },
   participated: { type: Boolean },
   profile: { type: String },
   hours: { type: Number, default: 0 },
