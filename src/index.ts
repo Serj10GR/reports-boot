@@ -228,7 +228,7 @@ bot.onText(/\/raport/, async (msg) => {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const job = new cron.CronJob(
-  '0 0 * * * *', // cronTime
+  '0 0 9 * * *', // cronTime
   async function () {
     console.log('running cron job');
     const users = await User.find();
