@@ -28,6 +28,7 @@ const userSchema = new mongoose.Schema({
   state: { type: String, default: 'idle' },
   firstName: { type: String },
   lastName: { type: String },
+  sent: { type: Boolean },
 });
 
 userSchema.set('toJSON', {
