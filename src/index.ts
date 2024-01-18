@@ -130,6 +130,17 @@ bot.on('message', async (msg) => {
           chatId,
           'Ai ales profilul "pionier". Câte ore ai făcut?',
         );
+      } else {
+        bot.sendMessage(
+          chatId,
+          'Nu înțeleg această opțiune te rog să alegi numai dintre "vestitor" sau "pionier"',
+          {
+            reply_markup: {
+              keyboard: [['vestitor', 'pionier']],
+              one_time_keyboard: true,
+            },
+          },
+        );
       }
       break;
 
@@ -141,20 +152,33 @@ bot.on('message', async (msg) => {
         });
 
         bot.sendMessage(chatId, 'Super! Câte studii biblice ai?');
-      } else {
+      } else if (messageText.toLowerCase() === 'nu') {
         await User.findByIdAndUpdate(user.id, {
           state: STATES.IDLE,
           participated: false,
+          sent: true,
         });
 
         bot.sendMessage(chatId, 'Mulțumesc!');
+      } else {
+        bot.sendMessage(
+          chatId,
+          'Nu înțeleg această opțiune te rog să alegi numai dintre "da" sau "nu"',
+          {
+            reply_markup: {
+              keyboard: [['da', 'nu']],
+              one_time_keyboard: true,
+            },
+          },
+        );
       }
       break;
 
     case STATES.HOURS:
       const hours = parseInt(messageText);
       if (isNaN(hours)) {
-        bot.sendMessage(chatId, 'Este necesar sa introducti un numar');
+        return bot.sendMessage(chatId, 'Este necesar sa introducti un numar');
+        
       }
 
       await User.findByIdAndUpdate(user.id, { state: STATES.STUDIES, hours });
@@ -165,12 +189,12 @@ bot.on('message', async (msg) => {
       const bibleStudies = parseInt(messageText);
 
       if (isNaN(bibleStudies)) {
-        bot.sendMessage(chatId, 'Este necesar sa introducti un numar');
+        return bot.sendMessage(chatId, 'Este necesar sa introducti un numar');
       }
 
       const updatedUser = await User.findByIdAndUpdate(
         user.id,
-        { state: STATES.IDLE, bibleStudies },
+        { state: STATES.IDLE, bibleStudies, sent: true },
         { new: true },
       );
       bot.sendMessage(
@@ -233,10 +257,11 @@ const job = new cron.CronJob(
     console.log('running cron job');
     const users = await User.find();
     users.forEach((user) => {
-      bot.sendMessage(
-        user.chatId,
-        '🛎️ Reminder: Predă raportul folosind comanda /raport',
-      );
+      if (!user.sent)
+        bot.sendMessage(
+          user.chatId,
+          '🛎️ Reminder: Predă raportul folosind comanda /raport',
+        );
     });
   }, // onTick
   null, // onComplete
