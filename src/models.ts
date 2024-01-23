@@ -29,6 +29,7 @@ const userSchema = new mongoose.Schema({
   firstName: { type: String },
   lastName: { type: String },
   sent: { type: Boolean },
+  reportMonth: { type: String },
 });
 
 userSchema.set('toJSON', {
