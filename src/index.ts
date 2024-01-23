@@ -3,6 +3,8 @@ const cors = require('cors');
 const cron = require('cron');
 
 const User = require('./models');
+const getLastMonth = require('./utils');
+
 
 const findUser = async (tgUserId: number) => User.findOne({ tgUserId });
 
@@ -192,14 +194,20 @@ bot.on('message', async (msg) => {
         return bot.sendMessage(chatId, 'Este necesar sa introducti un numar');
       }
 
+     
+
+      const lastMonth = getLastMonth();
+
       const updatedUser = await User.findByIdAndUpdate(
         user.id,
-        { state: STATES.IDLE, bibleStudies, sent: true },
+        { state: STATES.IDLE, 
+          bibleStudies, sent: true, 
+          reportMonth: `${lastMonth.month} ${lastMonth.year}` },
         { new: true },
       );
       bot.sendMessage(
         chatId,
-        `Raportul a fost trimis cu succes! ✅
+        `Raportul pentru ${lastMonth.month} ${lastMonth.year} a fost trimis cu succes! ✅
         
   *${updatedUser.firstName} ${updatedUser.lastName}*
   *Profil* - ${updatedUser.profile}
